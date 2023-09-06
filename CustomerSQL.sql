@@ -167,3 +167,117 @@ GROUP BY AGEGROUP2
 ORDER BY AGEGROUP2
 
 --İstanbul'da yaşayıp ilçesi 'Kadıköy' dışında olanları listeleyiniz.
+
+SELECT * FROM CUSTOMERS C
+INNER JOIN CITIES CT ON CT.ID= C.CITYID
+INNER JOIN DISTRICTS D ON D.ID=C.DISTRICTID
+WHERE CT.CITY='İSTANBUL' AND D.DISTRICT<>'KADIKÖY'
+--WHERE CT.CITY='İSTANBUL' AND D.DISTRICT NOT LIKE 'KADIKÖY'
+--WHERE CT.CITY='İSTANBUL' AND D.DISTRICT NOT IN('KADIKÖY')
+--WHERE CT.CITY='İSTANBUL' AND NOT D.DISTRICT = 'KADIKÖY'
+
+--SUBQUERY İLE
+
+SELECT * FROM CUSTOMERS
+WHERE CITYID IN (SELECT ID FROM CITIES WHERE CITY ='İSTANBUL')
+AND DISTRICTID NOT IN (SELECT ID FROM DISTRICTS WHERE DISTRICT='KADIKÖY')
+
+--Cities tablosundan 'Ankara' kaydını sildiğimizi varsayalım. Bu durumda şehri 'Ankara' olan müşterilerin şehir alanı boş gelecektir.
+--Şehir alanı boş olan müşterileri listeyen sorguyu yazınız.
+
+DELETE FROM CITIES WHERE CITY='ANKARA'
+SELECT * FROM CITIES WHERE CITY='ANKARA'
+SELECT * FROM CUSTOMERS WHERE CITYID=6
+
+SELECT * FROM CUSTOMERS C
+LEFT JOIN CITIES CT ON CT.ID=C.CITYID
+WHERE CT.CITY IS NULL
+
+--SUBQUERY İLE
+SELECT * FROM CUSTOMERS
+WHERE CITYID  NOT IN 
+(SELECT ID FROM CITIES)
+
+--Önceki soruda CITIES tablosundan silmiş olduğumuz Ankara kayıtlarını aynı ID leri alacak şekilde yeniden tabloya insert ediniz.
+
+SELECT * FROM CITIES
+
+SET IDENTITY_INSERT CITIES ON
+INSERT INTO CITIES(ID,CITY)
+VALUES(6,'ANKARA')
+SET IDENTITY_INSERT CITIES ON
+
+--Müşterilerimizin telefon numaralarının operatör bilgisini getirmek istiyoruz. TELNR1 ve TELNR2 alanlarının yanına operatör
+--numarasını (532),(505) gibi getirmek istiyoruz. Bu sorgu için SQL cümlesini yazınız.
+
+SELECT *,
+SUBSTRING(TELNR1,1,5) AS OPERATOR1,
+SUBSTRING(TELNR2,1,5) AS OPERATOR2
+FROM CUSTOMERS
+
+--Müşterilerimizin telefon numaralarının operatör bilgisini getirmek istiyoruz.
+--Örneğin telefon numaraları "50" ya da "55" ile başlayan "X" operatörü
+--"54" ile başlayan "Y" operatörü
+--"53" ile başlayan "Z" operatörü olsun. Buradan hangi operatörden ne kadar müşterimiz olduğu bilgisini getirecek sorguyu yazınız.
+
+SELECT 
+SUM(TELNR1_XOPERATORCOUNT+TELNR2_XOPERATORCOUNT) AS XOPERATORCOUNT,
+SUM(TELNR1_YOPERATORCOUNT+TELNR2_YOPERATORCOUNT) AS YOPERATORCOUNT,
+SUM(TELNR1_ZOPERATORCOUNT+TELNR2_ZOPERATORCOUNT) AS ZOPERATORCOUNT
+
+FROM
+(
+SELECT
+CASE	
+	WHEN TELNR1 LIKE '(50%' OR TELNR1 LIKE '(55%' THEN 1
+	ELSE 0
+END AS TELNR1_XOPERATORCOUNT,
+CASE	
+	WHEN TELNR1 LIKE '(54%' THEN 1
+	ELSE 0
+END AS TELNR1_YOPERATORCOUNT,
+CASE	
+	WHEN TELNR1 LIKE '(53%'  THEN 1
+	ELSE 0
+END AS TELNR1_ZOPERATORCOUNT,
+
+CASE	
+	WHEN TELNR2 LIKE '(50%' OR TELNR2 LIKE '(55%' THEN 1
+	ELSE 0
+END AS TELNR2_XOPERATORCOUNT,
+CASE	
+	WHEN TELNR2 LIKE '(54%' THEN 1
+	ELSE 0
+END AS TELNR2_YOPERATORCOUNT,
+CASE	
+	WHEN TELNR2 LIKE '(53%'  THEN 1
+	ELSE 0
+END AS TELNR2_ZOPERATORCOUNT,
+
+
+* FROM CUSTOMERS
+) T 
+
+
+-- Her ilde en çok müşteriye sahip olduğumuz ilçeleri müşteri sayısına göre çoktan aza doğru sıralı şekilde getirmek için gereken sorguyu yazınız.
+
+SELECT CT.CITY,D.DISTRICT,COUNT(C.ID) AS CUSTOMERCOUNT
+FROM CUSTOMERS C
+INNER JOIN CITIES CT ON  CT.ID = C.CITYID
+INNER JOIN DISTRICTS D ON D.ID=C.DISTRICTID
+GROUP BY CT.CITY,D.DISTRICT
+ORDER BY CT.CITY, COUNT(C.ID) DESC
+
+--Müşterilerin doğum günlerini Türkçe haftanın günü olarak getiren sorguyu yazınız
+SET LANGUAGE Turkish
+SELECT 
+CUSTOMERNAME,DATENAME(DW,BIRTHDATE) BIRTHDAY
+ FROM CUSTOMERS
+
+ --Doğum günü bugün olan müşterilerin listesini getiriniz.
+
+ SELECT * FROM CUSTOMERS
+ 
+ WHERE DATEPART(MONTH,BIRTHDATE)=DATEPART(MONTH,GETDATE()) 
+ AND 
+ DATEPART(DAY,BIRTHDATE)=DATEPART(DAY,GETDATE())
