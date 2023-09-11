@@ -28,7 +28,5 @@ Bu repository, bir müşteri yönetimi veritabanını temsil eder. Veritabanı, 
 
 Bu veritabanı, müşteri bilgilerini ve müşterilerin yaşadığı şehir ve ilçe bilgilerini saklamak için kullanılabilir. Her tablo, ilgili bilgileri saklamak için kullanılır ve ilişkilendirilmiş anahtarlarla birbirine bağlanabilir.
 
-Eğer veritabanı şemasını veya sorgu örneklerini daha fazla ayrıntıyla açıklamak isterseniz, lütfen bize bildirin ve size daha fazla yardımcı olmaktan mutluluk duyarız.
-
 ## Data Model
 ![alt text](https://github.com/metincanayar/SQL/blob/main/Customer%20Database/Customers%20Data%20Model.jpeg)
