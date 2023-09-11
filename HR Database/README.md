@@ -1,4 +1,4 @@
-# HR Veritabanı README
+# HR Veritabanı
 
 Bu repository, bir İnsan Kaynakları (HR) veritabanını temsil eder. Veritabanı, üç ana tablodan oluşur: `POSITION`, `PERSON`, ve `DEPARTMENT`. Aşağıda bu tabloların daha ayrıntılı açıklamalarını bulabilirsiniz:
 
