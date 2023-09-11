@@ -153,4 +153,6 @@ Bu repository, bir e-ticaret (ETRADE) veritabanını temsil eder. Veritabanı, b
 - **APPROVECODE**: Ödemenin onay kodunu içerir. Bu alan varchar(100) veri türündedir.
 - **PAYMENTTOTAL**: Ödemenin toplam tutarını içerir. Bu alan decimal(18,4) veri türündedir.
 
-Bu veritabanı şeması hakkında daha fazla bilgiye ihtiyaç duyarsanız veya başka bir sorunuz olursa lütfen sormaktan çekinmeyin.
+# Data Model
+
+![alt text](https://github.com/metincanayar/SQL/blob/main/ETRADE%20Database/ETRADE%20Data%20Model.jpeg)
